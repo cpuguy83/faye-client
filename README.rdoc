@@ -1,6 +1,30 @@
 = faye-client
 
-Description goes here.
+This is a wrapper for Faye::Client
+It handles managing the client and spinning it off to another thread, so you can easily run this in any ruby app without blocking the main thread.
+
+To use extend your class with FayeClient.
+You will need to set self.messaging_server_url, and self.messaging_channels where the url is the url of your Faye Server, channels are the channels you want to subscribe to, e.g. ['/example']
+
+Channels are expected to have a Handler for processing the message.
+We are expecting a SidekiqWorker class here by default.
+It will search for a class with MyClass::ChannelNameHandler where MyClass is the class that you extended for FayeClient, and ChannelName is the name of the channel, capitalied, without the begingin "/" and '::' for any other slash.
+
+So a channel called '/example' should have a handler at MyClass::ExampleHandler
+This class is by default expected to be a Sidekiq::Worker (Check out the Sidekiq project @ https://github.com/mperham/sidekiq ).
+This class should have a method called "perform", which you would be passing the received message to.
+Look at the Sidekiq docs for more details.
+
+If MyClass::ExampleHandler is not found it will look for defaults from your class:
+	self.default_channel_handler_class_name
+	self.default_channel_handler_method
+
+You can also further set this on a per channel bases where instead of passing in ['/message'] as your list of channels, you would do something like:
+	
+	[{name: '/message', handler_class_name: 'MyExampleClassName', handler_class_method: 'my_method'}]
+
+Keep in mind your channel handlers need to return quickly so that FayeClient can keep handling incoming messages.  This is why by default this is getting done asyncronously with Sidekiq.
+
 
 == Contributing to faye-client
  

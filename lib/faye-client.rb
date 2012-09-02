@@ -1,0 +1,7 @@
+require 'rubygems'
+require 'eventmachine'
+require 'Faye'
+require 'sidekiq'
+require 'active_support'
+require './faye_client/faye_client'
+require './faye_client/channel_handlers/default_channel_handler'
