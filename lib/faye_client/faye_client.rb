@@ -1,4 +1,27 @@
 module FayeClient
+	# extend FayeClient in your class to use
+	# the "start" method spins off the EM instance with the Faye client to it's own thread
+	# You can access the the client itself or the thread using the class accessor methods "messaging_client" and "messaging_client_thread", respectively
+	# You must specify a :messaging_server_url and :messaging_channels using the available class accessors
+	# You should also supply a default_channel_handler_class_name and a default_channel_handler_method or it will default to the built-in handler, which is useless
+	# Alternatively (or in addition to), you can specify a Hash for your channel which would specify which class/method to use to handler the incoming message
+	# Example:
+	#
+	# 	class MyClientClass
+	# 		extend FayeClient
+	# 		self.messaging_server_url = 'http://myserver/faye'
+	# 		self.messaging_channels = ['/foo', '/bar', {name: '/foofoo', handler_class_name: FooFooHandlerClass, handler_method_name: 'foofoo_handler_method' }]
+	# 		self.default_channel_handler_class_name = 'MyDefaultHandlerClass'
+	# 		self.default_channel_handler_method = 'my_default_handler_method'
+	# 	end
+	#
+	# 	MyClient.start
+	#
+	# Channels for '/foo' and '/bar' in the above example will use the default class/method combo specified
+	# Channel '/foofoo' will use the specified class/method, assuming they are defined
+
+	 
+
 	attr_accessor :messaging_client, :messaging_client_thread, :messaging_server_url, :messaging_channels
 	attr_accessor :default_channel_handler_class_name, :default_channel_handler_method
 
@@ -24,11 +47,20 @@ module FayeClient
 		end
 	end
 
-	def stop
-		raise "NotRunning" if !running?
-		EM.stop
+	# Publish a :message to a :channel
+	def publish(options)
+		raise 'NoChannelProvided' unless options[:channel]
+		raise 'NoMessageProvided' unless options[:message]
+		messaging_client.publish(options[:channel], options[:message])
 	end
 
+	# Stop the running client
+	def stop
+		raise "NotRunning" if !running?
+		self.messaging_client.disconnect
+	end
+
+	# Restart the running client
 	def restart
 		stop
 		start
@@ -37,9 +69,14 @@ module FayeClient
 
 	# Is the client running?
 	def running?
-		EM.reactor_running?
+		if self.messaging_client and self.messaging_client.state == :CONNECTED
+			true
+		else
+			false
+		end
 	end
 
+	# Set the handler class/method to be used for a given channel
 	def get_channel_handler(channel)
 		if channel.is_a? String
 			parsed_channel_name = channel.gsub(/^\//, '').gsub('/','::')
@@ -47,7 +84,7 @@ module FayeClient
 			handler[:name] = channel
 		elsif channel.is_a? Hash
 			# Can provide a Hash to get full customization of handler names/methods
-			handler = get_channel_handler_for_hash
+			handler = get_channel_handler_for_hash(channel)
 			handler[:name] = channel[:name]
 		else
 			raise TypeError, 'Channel Must be a String or a Hash'
@@ -56,6 +93,7 @@ module FayeClient
 		handler
 	end
 
+	# If just a string is provided for a channel
 	def get_channel_handler_for_string(channel)
 		handler = {}
 		# Set handler class
