@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "faye-client"
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Goff"]
-  s.date = "2012-09-02"
+  s.date = "2012-09-08"
   s.description = "Quickly and easily connect your app to a Faye server"
   s.email = "cpuguy83@gmail.com"
   s.extra_rdoc_files = [
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "faye-client.gemspec",
     "lib/faye-client.rb",
     "lib/faye_client/channel_handlers/default_channel_handler.rb",
     "lib/faye_client/faye_client.rb",
