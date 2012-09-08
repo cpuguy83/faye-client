@@ -26,8 +26,8 @@ Gem::Specification.new do |s|
     "VERSION",
     "faye-client.gemspec",
     "lib/faye-client.rb",
-    "lib/faye_client/channel_handlers/default_channel_handler.rb",
-    "lib/faye_client/faye_client.rb",
+    "lib/faye-client/channel_handlers/default_channel_handler.rb",
+    "lib/faye-client/faye_client.rb",
     "test/helper.rb",
     "test/test_faye-client.rb"
   ]
