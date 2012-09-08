@@ -58,6 +58,7 @@ module FayeClient
 	def stop
 		raise "NotRunning" if !running?
 		self.messaging_client.disconnect
+		self.messaging_client_thread.kill
 	end
 
 	# Restart the running client
