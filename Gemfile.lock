@@ -1,9 +1,9 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    active_support (3.0.0)
-      activesupport (= 3.0.0)
-    activesupport (3.0.0)
+    activesupport (3.2.8)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
     addressable (2.3.2)
     celluloid (0.12.0)
       timers (>= 1.0.0)
@@ -29,6 +29,7 @@ GEM
       eventmachine (>= 0.12.0)
     git (1.2.5)
     http_parser.rb (0.5.3)
+    i18n (0.6.1)
     jeweler (1.8.4)
       bundler (~> 1.0)
       git (>= 1.2.5)
@@ -62,7 +63,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_support (>= 3.0)
+  activesupport
   bundler (~> 1.1.1)
   eventmachine
   faye
