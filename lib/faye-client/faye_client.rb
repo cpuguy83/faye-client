@@ -128,7 +128,7 @@ module FayeClient
 
 	def get_channel_handler_class_name_for_string(channel)
 		# Try to use the channel name to determine the class to use
-		class_name = "#{self.class}::#{channel.capitalize}Handler"
+		class_name = "#{self.name}::#{channel.capitalize}Handler"
 		rescue_counter = 0
 		begin
 		class_name = ActiveSupport::Inflector.constantize class_name if class_name.is_a? String
