@@ -1,5 +1,5 @@
 module FayeClient
-	# extend FayeClient in your class to use
+	# extend FayeClient in your class/module to use
 	# the "start" method spins off the EM instance with the Faye client to it's own thread
 	# You can access the the client itself or the thread using the class accessor methods "messaging_client" and "messaging_client_thread", respectively
 	# You must specify a :messaging_server_url and :messaging_channels using the available class accessors
@@ -7,7 +7,7 @@ module FayeClient
 	# Alternatively (or in addition to), you can specify a Hash for your channel which would specify which class/method to use to handler the incoming message
 	# Example:
 	#
-	# 	class MyClientClass
+	# 	module MyClient
 	# 		extend FayeClient
 	# 		self.messaging_server_url = 'http://myserver/faye'
 	# 		self.messaging_channels = ['/foo', '/bar', {name: '/foofoo', handler_class_name: FooFooHandlerClass, handler_method_name: 'foofoo_handler_method' }]
