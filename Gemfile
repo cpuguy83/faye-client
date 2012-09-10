@@ -2,7 +2,7 @@ source "http://rubygems.org"
 gem 'faye'
 gem 'eventmachine'
 gem 'sidekiq'
-gem 'active_support'
+gem 'active_support', ">= 3.0"
 
 group :development do
 	gem "shoulda", ">= 0"
